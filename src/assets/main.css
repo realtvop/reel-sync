@@ -1,0 +1,28 @@
+@import "./base.css";
+
+:root {
+  --topbar-height: 60px;
+}
+
+#app {
+  margin: 0 auto;
+  padding: calc(var(--topbar-height) + 2rem) 2rem 2rem 2rem;
+  font-weight: normal;
+  text-align: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.container-c {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin: 0 auto;
+  height: calc(100vh - var(--topbar-height) - 12rem);
+  justify-content: center;
+}
+
+.monospace {
+  font-family: ui-monospace, "Jetbrains Mono", "Maple Mono NF CN", "Cascadia Code",
+    "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+}
