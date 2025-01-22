@@ -114,7 +114,8 @@ export default {
           iceServers: result.iceServers.urls.map((url) => {
             if (url.startsWith("turn") || url.startsWith("turns")) {
               return {
-                url: `${url.replace(/^(turn|turns):/, `$&${result.iceServers.username}@`)}`,
+                urls: url,
+                username: result.iceServers.username,
                 credential: result.iceServers.credential,
               };
             }
