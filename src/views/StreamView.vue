@@ -172,6 +172,12 @@ export default {
 </script>
 
 <style scoped>
+#video-player-stream {
+  margin: 0 auto;
+  width: 90vw;
+  max-width: 1000px;
+}
+
 #room-id-indicator {
   color: gray;
 }
