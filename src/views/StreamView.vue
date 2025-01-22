@@ -78,7 +78,7 @@ export default {
       });
 
       conn.on("open", () => {
-        conn.send(`connected-${shared.app.guestID}`);
+        conn.send(`connected@${shared.app.guestID}`);
         msg.i(`和 ${shared.app.roomID} 的连接已建立`);
         shared.peers.local.video.on("call", (call) => {
           call.answer();
@@ -96,22 +96,22 @@ export default {
 
       conn.on("data", (data) => {
         const video = document.getElementById("video-player-stream");
-        if (data.toString().startsWith("origin-")) {
+        if (data.toString().startsWith("origin")) {
           shared.app.method = 1;
-          const origin = data.toString().split("-")[1];
+          const origin = data.toString().split("@")[1];
           video.src = origin;
           shared.app.syncThread = setInterval(() => {
             msg.i(`发送当前视频进度: ${video.currentTime}`);
-            conn.send(`video-sync:${video.currentTime}`);
-          }, 10000);
-        } else if (data.toString().startsWith("video-")) {
-          const command = data.toString().split("-")[1];
+            conn.send(`video@sync:${video.currentTime}`);
+          }, 5000);
+        } else if (data.toString().startsWith("video")) {
+          const command = data.toString().split("@")[1];
           if (command === "play") {
             video.play();
           } else if (command === "pause") {
             video.pause();
           } else if (command.startsWith("seek")) {
-            const time = data.toString().split("-")[1].split(":")[1];
+            const time = data.toString().split("@")[1].split(":")[1];
             video.currentTime = time;
           }
         }
@@ -161,8 +161,8 @@ export default {
           shared.peers.remote.data = conn;
         });
         conn.on("data", function (data) {
-          const status = data.toString().split("-")[0];
-          const peerID = data.toString().split("-")[1];
+          const status = data.toString().split("@")[0];
+          const peerID = data.toString().split("@")[1];
           if (status === "connected") {
             msg.i(`和 ${conn.peer} 的连接已建立`);
             that.isReady = true;
@@ -186,26 +186,26 @@ export default {
               call; // prevent eslint error
             } else {
               const video = document.getElementById("video-player-stream");
-              conn.send(`origin-${shared.app.videoURL}`);
+              conn.send(`origin@${shared.app.videoURL}`);
               video.addEventListener("play", () => {
-                conn.send("video-play");
+                conn.send("video@play");
               });
               video.addEventListener("pause", () => {
-                conn.send("video-pause");
+                conn.send("video@pause");
               });
               video.addEventListener("seeking", () => {
-                conn.send(`video-seek:${video.currentTime}`);
+                conn.send(`video@seek:${video.currentTime}`);
               });
             }
           } else if (status == "video") {
             const video = document.getElementById("video-player-stream");
-            const message = data.toString().split("-")[1];
+            const message = data.toString().split("@")[1];
             if (message.startsWith("sync")) {
               const time = message.split(":")[1];
               const delta = time - video.currentTime;
               if (Math.abs(delta) > (import.meta.env.VITE_MAX_ACCEPTABLE_DELAY_SECONDS ?? 3)) {
                 msg.w(`时间差过大，尝试同步。时间差：${delta}`);
-                conn.send(`video-seek:${video.currentTime}`);
+                conn.send(`video@seek:${video.currentTime}`);
               } else {
                 msg.i(`收到从节点报告的播放进度。时间差：${delta}`);
               }

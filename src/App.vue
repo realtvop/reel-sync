@@ -31,7 +31,7 @@ export default {};
   width: 100%;
   height: var(--topbar-height);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(12px) brightness(0.8);
+  backdrop-filter: blur(12px);
 }
 
 #title {
