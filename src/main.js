@@ -19,9 +19,11 @@ setColorScheme("#666666");
 export const shared = {
   app: {
     mode: 0,
+    method: 0,
     roomID: "",
     guestID: "",
     videoURL: "",
+    syncThread: null,
   },
   peers: {
     local: {
