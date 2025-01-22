@@ -92,7 +92,8 @@ export default {
       }
     },
     async getTurnNode() {
-      const url = import.meta.env.VUE_APP_TURN_NODE_URL;
+      const url = import.meta.env.VITE_NODE_SERVER_URL;
+      console.log(url);
       const data = {
         ttl: 86400, // 请求体数据
       };
