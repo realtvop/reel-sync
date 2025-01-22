@@ -21,6 +21,7 @@ export const shared = {
     mode: 0,
     roomID: "",
     guestID: "",
+    videoURL: "",
   },
   peers: {
     local: {

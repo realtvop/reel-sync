@@ -14,7 +14,7 @@
     <label id="mode-indicator">{{ modeName }}</label>
     <br />
     <div v-if="isMaster">
-      <reelsync-video-input id="video-input" @change="checkVideoValidity"></reelsync-video-input>
+      <reelsync-video-input id="video-input" @change="onVideoUpload"></reelsync-video-input>
       <mdui-fab
         extended
         size="normal"
@@ -24,6 +24,7 @@
       >
         上传视频文件
       </mdui-fab>
+      <reelsync-video-player style="display: none" id="video-player"></reelsync-video-player>
       <br /><br />
       <mdui-button @click="createRoom" id="create-room-button" disabled>创建房间</mdui-button>
     </div>
@@ -51,6 +52,7 @@ import { msg } from "@/utils/msg";
 
 import Peer from "peerjs";
 import VideoInput from "@/components/VideoInput.vue";
+import VideoPlayer from "@/components/VideoPlayer.vue";
 
 export default {
   data() {
@@ -83,8 +85,10 @@ export default {
       msg.i(`已获得视频文件：${videoInput.value}`);
       if (videoInput.value) {
         createRoomButton.removeAttribute("disabled");
+        return true;
       } else {
         createRoomButton.setAttribute("disabled", true);
+        return false;
       }
     },
     createRoom() {
@@ -100,7 +104,17 @@ export default {
       shared.peers.local.data = new Peer(id.data);
       shared.peers.local.video = new Peer(id.video);
       this.$router.push("/stream");
-    }
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      const videoURL = URL.createObjectURL(file);
+      shared.app.videoURL = videoURL;
+    },
+    onVideoUpload(event) {
+      if (this.checkVideoValidity()) {
+        this.handleFileChange(event);
+      }
+    },
   },
   watch: {
     mode(value) {
@@ -125,6 +139,7 @@ export default {
   },
   components: {
     "reelsync-video-input": VideoInput,
+    "reelsync-video-player": VideoPlayer,
   },
 };
 </script>

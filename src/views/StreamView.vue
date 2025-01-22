@@ -2,18 +2,24 @@
   <div class="container-c">
     <h1>流式传输</h1>
     <span class="monospace" id="room-id-indicator">您的{{ roleDescription }}号：{{ roomID }}</span>
-    <span v-if="!isSlave">⠀号码已复制。请您将号码发送给您的伙伴。</span><br /><br />
+    <span v-if="!isReady">⠀{{ hint }}</span
+    ><br /><br />
     <loading-ring v-if="!isReady" id="loading"></loading-ring><br />
     <h3 v-if="!isReady">{{ loadingDescription }}</h3>
-    <h3 v-if="isReady">已连接</h3>
+    <video-player
+      id="video-player-stream"
+      :style="{ display: isReady ? 'block' : 'none' }"
+    ></video-player>
   </div>
 </template>
 
 <script>
 import { shared } from "@/main";
+import { msg } from "@/utils/msg";
+import { transformSdp } from "@/utils/sdp";
 
 import LoadingRing from "@/components/LoadingRing.vue";
-import { msg } from "@/utils/msg";
+import VideoPlayer from "@/components/VideoPlayer.vue";
 
 export default {
   name: "StreamView",
@@ -24,6 +30,11 @@ export default {
       isReady: false,
       get roleDescription() {
         return this.isSlave ? "成员" : "房间";
+      },
+      get hint() {
+        return this.isSlave
+          ? "请耐心等待。正在全球互联网寻找您的伙伴..."
+          : "号码已复制。请您将号码发送给您的伙伴。";
       },
       get loadingDescription() {
         return shared.app.mode == 1 ? "正在加入伙伴" : "正在等待伙伴";
@@ -58,8 +69,18 @@ export default {
       });
 
       conn.on("open", () => {
-        conn.send("connected");
+        conn.send(`connected-${shared.app.guestID}`);
         msg.i(`和 ${shared.app.roomID} 的连接已建立`);
+        shared.peers.local.video.on("call", (call) => {
+          call.answer();
+          call.on("stream", (stream) => {
+            msg.i("收到视频流");
+            const video = document.getElementById("video-player-stream");
+            video.srcObject = stream;
+            video.load();
+            video.play();
+          });
+        });
         this.isReady = true;
         shared.peers.remote.data = conn;
       });
@@ -72,7 +93,6 @@ export default {
         setTimeout(() => this.connectToPeer(), 1000);
       });
 
-      // 添加连接关闭处理
       conn.on("close", () => {
         msg.w("连接已关闭");
         shared.peers.remote.data = null;
@@ -88,7 +108,6 @@ export default {
     const that = this;
 
     if (this.isSlave) {
-      msg.i("正在以 slave 身份与 master 建立连接");
       const dataPeer = shared.peers.local.data;
 
       // 确保peer已经就绪后再连接
@@ -107,9 +126,30 @@ export default {
           shared.peers.remote.data = conn;
         });
         conn.on("data", function (data) {
-          if (data === "connected") {
+          const status = data.toString().split("-")[0];
+          const peerID = data.toString().split("-")[1];
+          if (status === "connected") {
             msg.i(`和 ${conn.peer} 的连接已建立`);
             that.isReady = true;
+            // const videoConstraints = {
+            //   width: { min: 1920, ideal: 2560, max: 3840 },
+            //   height: { min: 1080, ideal: 1440, max: 2160 },
+            //   frameRate: { min: 30, ideal: 30, max: 60 },
+            // };
+            // const audioConstraints = {
+            //   echoCancellation: false,
+            //   noiseSuppression: false,
+            //   autoGainControl: false,
+            //   sampleRate: 48000,
+            //   channelCount: 2,
+            // };
+            const stream = document.querySelector("#video-player-stream").captureStream();
+            // stream.getVideoTracks()[0].applyConstraints(videoConstraints);
+            // if (stream.getAudioTracks().length > 0) stream.getAudioTracks()[0].applyConstraints(audioConstraints);
+            const call = shared.peers.local.video.call(`${peerID}-video`, stream);
+            call; // prevent eslint error
+          } else {
+            msg.e(`收到无效消息：${data}`);
           }
         });
         conn.on("close", () => {
@@ -118,9 +158,15 @@ export default {
         });
       });
     }
+
+    ((el) => {
+      el.src = shared.app.videoURL;
+      el.load();
+    })(document.querySelector("#video-player-stream"));
   },
   components: {
     "loading-ring": LoadingRing,
+    "video-player": VideoPlayer,
   },
 };
 </script>
