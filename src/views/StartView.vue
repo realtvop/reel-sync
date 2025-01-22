@@ -107,16 +107,29 @@ export default {
         });
         if (!response.ok) {
           msg.e("TURN 节点请求失败");
+          return false;
         }
         const result = await response.json();
-        return result;
+        const cfg = {
+          iceServers: result.iceServers.urls.map((url) => {
+            if (url.startsWith("turn") || url.startsWith("turns")) {
+              return {
+                url: `${url.replace(/^(turn|turns):/, `$&${result.iceServers.username}@`)}`,
+                credential: result.iceServers.credential,
+              };
+            }
+            return { url };
+          }),
+        };
+        console.log(cfg);
+        return cfg;
       } catch (error) {
         msg.e("TURN 节点请求失败：", error);
         return false;
       }
     },
     async createRoom() {
-      const cfg = await this.getTurnNode();
+      const cfg = await this.getTurnNode() ?? {};
       const id = new PeerID().id;
       shared.app.roomID = id.raw;
       shared.peers.local.data = new Peer(id.data, { config: cfg });
