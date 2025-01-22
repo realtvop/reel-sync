@@ -7,6 +7,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 
+import CryptoJS from "crypto-js";
+
 const app = createApp(App);
 
 app.use(router);
@@ -18,6 +20,7 @@ export const shared = {
   app: {
     mode: 0,
     roomID: "",
+    guestID: "",
   },
   peers: {
     local: {
@@ -33,3 +36,4 @@ export const shared = {
 
 window.exposed = {};
 window.exposed.shared = shared;
+window.exposed.CryptoJS = CryptoJS;

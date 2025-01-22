@@ -94,6 +94,13 @@ export default {
       shared.peers.local.video = new Peer(id.video);
       this.$router.push("/stream");
     },
+    joinRoom() {
+      const id = new PeerID().id;
+      shared.app.guestID = id.raw;
+      shared.peers.local.data = new Peer(id.data);
+      shared.peers.local.video = new Peer(id.video);
+      this.$router.push("/stream");
+    }
   },
   watch: {
     mode(value) {

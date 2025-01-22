@@ -15,7 +15,6 @@ export class PeerID {
     video: "",
   };
   generate() {
-    const randomValues = window.crypto.getRandomValues(new Uint16Array(16));
-    return CryptoJS.MD5(randomValues).toString().substring(0, 16);
+    return `${CryptoJS.HmacSHA1(Math.random().toString(), "whyisthisnotworking")}`.substring(0, 16);
   }
 }
