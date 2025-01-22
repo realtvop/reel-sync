@@ -26,7 +26,7 @@
       </mdui-fab>
       <reelsync-video-player style="display: none" id="video-player"></reelsync-video-player>
       <br /><br />
-      <mdui-button @click="createRoom" id="create-room-button" disabled>创建房间</mdui-button>
+      <mdui-button @click="onCreateRequest" id="create-room-button" disabled>创建房间</mdui-button>
     </div>
     <div v-else>
       <mdui-text-field
@@ -40,7 +40,7 @@
         counter
       ></mdui-text-field
       ><br />
-      <mdui-button @click="joinRoom" id="join-room-button" disabled>加入房间</mdui-button>
+      <mdui-button @click="onJoinRequest" id="join-room-button" disabled>加入房间</mdui-button>
     </div>
   </div>
 </template>
@@ -91,19 +91,58 @@ export default {
         return false;
       }
     },
-    createRoom() {
+    async getTurnNode() {
+      const url = import.meta.env.VUE_APP_TURN_NODE_URL;
+      const data = {
+        ttl: 86400, // 请求体数据
+      };
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+          msg.e("TURN 节点请求失败");
+        }
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        msg.e("TURN 节点请求失败：", error);
+        return false;
+      }
+    },
+    async createRoom() {
+      const cfg = await this.getTurnNode();
       const id = new PeerID().id;
       shared.app.roomID = id.raw;
-      shared.peers.local.data = new Peer(id.data);
-      shared.peers.local.video = new Peer(id.video);
+      shared.peers.local.data = new Peer(id.data, { config: cfg });
+      shared.peers.local.video = new Peer(id.video, { config: cfg });
       this.$router.push("/stream");
     },
-    joinRoom() {
+    async joinRoom() {
+      const cfg = (await this.getTurnNode()) ?? {};
       const id = new PeerID().id;
       shared.app.guestID = id.raw;
-      shared.peers.local.data = new Peer(id.data);
-      shared.peers.local.video = new Peer(id.video);
+      shared.peers.local.data = new Peer(id.data, { config: cfg });
+      shared.peers.local.video = new Peer(id.video, { config: cfg });
       this.$router.push("/stream");
+    },
+    async onCreateRequest() {
+      document.getElementById("create-room-button").setAttribute("loading", true);
+      document.getElementById("create-room-button").setAttribute("disabled", true);
+      await this.createRoom();
+      document.getElementById("create-room-button").removeAttribute("loading");
+      document.getElementById("create-room-button").removeAttribute("disabled");
+    },
+    async onJoinRequest() {
+      document.getElementById("join-room-button").setAttribute("loading", true);
+      document.getElementById("join-room-button").setAttribute("disabled", true);
+      await this.joinRoom();
+      document.getElementById("join-room-button").removeAttribute("loading");
+      document.getElementById("join-room-button").removeAttribute("disabled");
     },
     handleFileChange(event) {
       const file = event.target.files[0];
