@@ -24,6 +24,7 @@ export const shared = {
     guestID: "",
     videoURL: "",
     syncThread: null,
+    pingThread: null,
   },
   peers: {
     local: {

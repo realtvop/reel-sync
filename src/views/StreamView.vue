@@ -20,8 +20,9 @@
       {{ isReady ? "已连接" : "未连接" }}：{{
         !isSlave ? `正在推送${method == 1 ? "同源" : "点对点"}视频流` : "正在观看视频流"
       }}
-      <div v-if="!isSlave && method == 1 && isReady">
-        &nbsp;(视频进度差异：{{ playbackDelta ? Math.round(playbackDelta * 1e3) : "正在测量"
+      <div v-if="((!isSlave && method == 1) || isSlave || (!isSlave && method == 0)) && isReady">
+        &nbsp;({{ method == 1 ? "视频进度差异" : "网络延迟" }}：{{
+          playbackDelta ? Math.round(playbackDelta * 1e3) : "正在测量"
         }}{{ playbackDelta ? "ms" : "" }})
       </div></span
     >
@@ -122,6 +123,14 @@ export default {
             const time = data.toString().split("@")[1].split(":")[1];
             video.currentTime = time;
           }
+        } else if (data.toString().startsWith("latency")) {
+          const latency = parseFloat(data.toString().split("@")[1]);
+          this.playbackDelta = latency;
+        } else if (data.toString().startsWith("timestamp")) {
+          const timestamp = parseFloat(data.toString().split("@")[1]);
+          const latency = (Date.now() - timestamp) / 1000;
+          this.playbackDelta = latency;
+          conn.send(`latency@${latency}`);
         }
       });
 
@@ -192,6 +201,12 @@ export default {
               // if (stream.getAudioTracks().length > 0) stream.getAudioTracks()[0].applyConstraints(audioConstraints);
               const call = shared.peers.local.video.call(`${peerID}-video`, stream);
               call; // prevent eslint error
+              shared.app.pingThread = setInterval(
+                () => {
+                  conn.send(`timestamp@${Date.now()}`);
+                },
+                import.meta.env.VITE_SAME_ORIGIN_SYNC_INTERVAL_SECONDS * 1e3,
+              );
             } else {
               const video = document.getElementById("video-player-stream");
               conn.send(`origin@${shared.app.videoURL}`);
@@ -219,7 +234,11 @@ export default {
                 msg.i(`收到从节点报告的播放进度。时间差：${delta}`);
                 that.playbackDelta = delta;
               }
+              conn.send(`latency@${delta}`);
             }
+          } else if (status == "latency") {
+            const latency = data.toString().split("@")[1];
+            that.playbackDelta = latency;
           } else {
             msg.e(`收到无效消息：${data}`);
           }
@@ -240,6 +259,7 @@ export default {
   },
   beforeUnmount() {
     if (shared.app.syncThread) clearInterval(shared.app.syncThread);
+    if (shared.app.pingThread) clearInterval(shared.app.pingThread);
   },
   components: {
     "loading-ring": LoadingRing,
