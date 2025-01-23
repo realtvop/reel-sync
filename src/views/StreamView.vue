@@ -19,7 +19,11 @@
       ><s :style="{ color: isReady ? 'green' : 'red' }">⬤</s>
       {{ isReady ? "已连接" : "未连接" }}：{{
         !isSlave ? `正在推送${method == 1 ? "同源" : "点对点"}视频流` : "正在观看视频流"
-      }}</span
+      }}
+      <div v-if="!isSlave && method == 1 && isReady">
+        &nbsp;(视频进度差异：{{ playbackDelta ? Math.round(playbackDelta * 1e3) : "正在测量"
+        }}{{ playbackDelta ? "ms" : "" }})
+      </div></span
     >
   </div>
 </template>
@@ -39,6 +43,7 @@ export default {
       connectionAttempts: 0,
       maxAttempts: 3,
       isReady: false,
+      playbackDelta: null,
       get method() {
         return shared.app.method;
       },
@@ -100,10 +105,13 @@ export default {
           shared.app.method = 1;
           const origin = data.toString().split("@")[1];
           video.src = origin;
-          shared.app.syncThread = setInterval(() => {
-            msg.i(`发送当前视频进度: ${video.currentTime}`);
-            conn.send(`video@sync:${video.currentTime}`);
-          }, 5000);
+          shared.app.syncThread = setInterval(
+            () => {
+              msg.i(`发送当前视频进度: ${video.currentTime}`);
+              conn.send(`video@sync:${video.currentTime}`);
+            },
+            import.meta.env.VITE_SAME_ORIGIN_SYNC_INTERVAL_SECONDS * 1e3,
+          );
         } else if (data.toString().startsWith("video")) {
           const command = data.toString().split("@")[1];
           if (command === "play") {
@@ -205,9 +213,11 @@ export default {
               const delta = time - video.currentTime;
               if (Math.abs(delta) > (import.meta.env.VITE_MAX_ACCEPTABLE_DELAY_SECONDS ?? 3)) {
                 msg.w(`时间差过大，尝试同步。时间差：${delta}`);
+                that.playbackDelta = delta;
                 conn.send(`video@seek:${video.currentTime}`);
               } else {
                 msg.i(`收到从节点报告的播放进度。时间差：${delta}`);
+                that.playbackDelta = delta;
               }
             }
           } else {
