@@ -215,6 +215,27 @@ export default {
         this.isVideoReady = true;
       } else this.isVideoReady = false;
     },
+    handleKeyPress(event) {
+      if (event.key === "Enter") {
+        if (this.isMaster) {
+          if (!document.getElementById("create-room-button").disabled) {
+            this.onCreateRequest();
+            event.preventDefault();
+          }
+        } else {
+          if (!document.getElementById("join-room-button").disabled) {
+            this.onJoinRequest();
+            event.preventDefault();
+          }
+        }
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener("keypress", this.handleKeyPress);
+  },
+  unmounted() {
+    window.removeEventListener("keypress", this.handleKeyPress);
   },
   watch: {
     mode(value) {
@@ -248,7 +269,7 @@ export default {
           /^(?:(http|https|ftp):\/\/)?((|[\w-]+\.)+[a-z0-9]+)(?:(\/[^/?#]+)*)?(\?[^#]+)?(#.+)?$/i,
         )
       ) {
-        msg.d("video ready")
+        msg.d("video ready");
         this.isOriginReady = true;
         originURLInput.removeAttribute("helper");
         shared.app.videoURL = value;
