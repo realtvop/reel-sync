@@ -20,6 +20,7 @@ ReelSync - 随时随地和另一个人同时观看一个视频 | Watch videos wi
 
 - `VITE_NODE_SERVER_URL` - 你的 `iceServer` 服务器列表地址（API 格式参考 Cloudflare Call）
 - `VITE_MAX_ACCEPTABLE_DELAY_SECONDS` - 最大可接受延迟时间（秒）
+- `VITE_SAME_ORIGIN_SYNC_INTERVAL_SECONDS` - 同源模式下视频进度同步间隔时间（秒）
 
 ## 推荐的开发环境
 
