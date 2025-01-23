@@ -4,19 +4,27 @@ import { RouterView } from "vue-router";
 
 <template>
   <div class="topbar">
-    <img src="./assets/icon_256x.png" alt="ReelSync Logo" id="logo" />
+    <img src="./assets/logo.png" alt="ReelSync Logo" id="logo" />
     <div id="title">ReelSync</div>
   </div>
   <RouterView />
   <footer>
-    <!-- <b style="font-weight: bold;">ReelSync</b> -->
+    <b style="font-weight: bold;">Version {{ REELSYNC_PACKAGE_VERSION }}</b>
     Powered by WebRTC and other awesome web technologies. <br />
     Crafted with ❤ by kW.
   </footer>
 </template>
 
 <script>
-export default {};
+export default {
+  name: "App",
+  data() {
+    return {
+      // eslint-disable-next-line no-undef
+      REELSYNC_PACKAGE_VERSION: __APP_VERSION__,
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -30,13 +38,14 @@ export default {};
   left: 0;
   width: 100%;
   height: var(--topbar-height);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  mask-image: linear-gradient(180deg, white 85%, transparent 100%);
 }
 
 #title {
   font-weight: bold;
-  /* text-shadow: 0 0 12px; */
+  /* text-shadow: 0 0 36px; */
 }
 
 footer {

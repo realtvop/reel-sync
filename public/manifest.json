@@ -1,0 +1,31 @@
+{
+  "name": "ReelSync",
+  "short_name": "ReelSync",
+  "description": "ReelSync - 随时随地和另一个人同时观看一个视频 | Watch videos with someone in sync, anytime, anywhere. ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafdfd",
+  "theme_color": "#666666",
+  "icons": [
+    {
+      "src": "icon_64x.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_128x.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_256x.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_512x.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

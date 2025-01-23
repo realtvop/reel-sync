@@ -241,7 +241,7 @@ export default {
 <style scoped>
 #video-player-stream {
   margin: 0 auto;
-  width: 90vw;
+  width: 100%;
   max-width: 1000px;
 }
 

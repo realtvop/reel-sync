@@ -19,7 +19,7 @@
   flex-direction: column;
   text-align: center;
   margin: 0 auto;
-  height: calc(100vh - var(--topbar-height) - 12rem);
+  height: calc(100vh - var(--topbar-height) - 10rem);
   justify-content: center;
 }
 
