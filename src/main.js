@@ -2,12 +2,10 @@ import "./assets/main.css";
 import "mdui";
 import "mdui/mdui.css";
 import { setColorScheme } from "mdui/functions/setColorScheme";
-
 import { createApp } from "vue";
+
 import App from "./App.vue";
 import router from "./router";
-
-import CryptoJS from "crypto-js";
 
 const app = createApp(App);
 
@@ -37,7 +35,3 @@ export const shared = {
     },
   },
 };
-
-window.exposed = {};
-window.exposed.shared = shared;
-window.exposed.CryptoJS = CryptoJS;
