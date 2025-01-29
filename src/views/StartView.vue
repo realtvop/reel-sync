@@ -56,7 +56,8 @@
       <mdui-button
         @click="onCreateRequest"
         id="create-room-button"
-        :disabled="!isVideoReady && !isOriginReady"
+        :disabled="(!isVideoReady && !isOriginReady) || isLoading"
+        :loading="isLoading"
         >创建房间</mdui-button
       >
     </div>
@@ -72,7 +73,9 @@
         counter
       ></mdui-text-field
       ><br />
-      <mdui-button @click="onJoinRequest" id="join-room-button" disabled>加入房间</mdui-button>
+      <mdui-button @click="onJoinRequest" id="join-room-button" :disabled="!isRoomReady" :loading="isLoading"
+        >加入房间</mdui-button
+      >
     </div>
   </div>
 </template>
@@ -95,6 +98,8 @@ export default {
       originURL: "",
       isVideoReady: false,
       isOriginReady: false,
+      isLoading: false,
+      isRoomReady: false,
       get methodName() {
         return this.method === 0 ? "点对点模式" : "同源模式";
       },
@@ -189,17 +194,15 @@ export default {
       this.$router.push("/stream");
     },
     async onCreateRequest() {
-      document.getElementById("create-room-button").setAttribute("loading", true);
-      document.getElementById("create-room-button").setAttribute("disabled", true);
+      this.isLoading = true;
       await this.createRoom();
-      document.getElementById("create-room-button").removeAttribute("loading");
-      document.getElementById("create-room-button").removeAttribute("disabled");
+      this.isLoading = false;
     },
     async onJoinRequest() {
-      document.getElementById("join-room-button").setAttribute("loading", true);
+      this.isLoading = true;
       document.getElementById("join-room-button").setAttribute("disabled", true);
       await this.joinRoom();
-      document.getElementById("join-room-button").removeAttribute("loading");
+      this.isLoading = false;
       document.getElementById("join-room-button").removeAttribute("disabled");
     },
     handleFileChange(event) {
@@ -247,17 +250,16 @@ export default {
       msg.i(`传输方式改变：${shared.app.method === 0 ? "p2p" : "same-origin"}`);
     },
     roomID(value) {
-      const joinRoomButton = document.getElementById("join-room-button");
       const roomIDInput = document.getElementById("room-id-input");
       if (value.length === 16) {
-        joinRoomButton.removeAttribute("disabled");
+        this.isRoomReady = true;
         roomIDInput.removeAttribute("helper");
         shared.app.roomID = value;
       } else if (value.length == 0) {
-        joinRoomButton.setAttribute("disabled", true);
+        this.isRoomReady = false;
         roomIDInput.setAttribute("helper", "请提供一个房间 ID。");
       } else {
-        joinRoomButton.setAttribute("disabled", true);
+        this.isRoomReady = false;
         roomIDInput.setAttribute("helper", "房间 ID 格式不正确。");
       }
     },
