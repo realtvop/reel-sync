@@ -109,7 +109,8 @@ export default {
           shared.app.syncThread = setInterval(
             () => {
               msg.i(`发送当前视频进度: ${video.currentTime}`);
-              conn.send(`video@sync:${video.currentTime}`);
+              // bro this msg syntax is bad ahhhh
+              conn.send(`video@sync:${video.currentTime}&timestamp=${Date.now()}`);
             },
             import.meta.env.VITE_SAME_ORIGIN_SYNC_INTERVAL_SECONDS * 1e3,
           );
@@ -224,8 +225,10 @@ export default {
             const video = document.getElementById("video-player-stream");
             const message = data.toString().split("@")[1];
             if (message.startsWith("sync")) {
-              const time = message.split(":")[1];
-              const delta = time - video.currentTime;
+              // this is really garbage code but i dont have time for a cleaner implementaion
+              const time = message.split(":")[1].split("&")[0];
+              const offset = (Date.now() - message.split(":")[1].split("&")[1].split("=")[1]) / 1e3;
+              const delta = time - video.currentTime - offset;
               if (Math.abs(delta) > (import.meta.env.VITE_MAX_ACCEPTABLE_DELAY_SECONDS ?? 3)) {
                 msg.w(`时间差过大，尝试同步。时间差：${delta}`);
                 that.playbackDelta = delta;
