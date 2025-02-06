@@ -73,7 +73,11 @@
         counter
       ></mdui-text-field
       ><br />
-      <mdui-button @click="onJoinRequest" id="join-room-button" :disabled="!isRoomReady" :loading="isLoading"
+      <mdui-button
+        @click="onJoinRequest"
+        id="join-room-button"
+        :disabled="!isRoomReady"
+        :loading="isLoading"
         >加入房间</mdui-button
       >
     </div>
