@@ -8,6 +8,31 @@
 
 ReelSync - 随时随地和另一个人同时观看一个视频 | Watch videos with someone in sync, anytime, anywhere. 
 
+## 路线图
+
+***上学比较忙，进度可能推进缓慢。欢迎 Fork 并贡献。***
+
+- [x] 点对点模式
+  - [x] WebRTC 实时视频流传输
+- [ ] 同源模式 ←
+  - [x] WebRTC 播放进度和行为通讯
+  - [x] 端到端播放进度同步
+  - [x] 延迟测量
+  - [ ] 考虑网络延迟的播放进度同步 ←
+  - [ ] 从节点视频操作请求
+
+- [ ] 实时聊天
+  - [ ] WebRTC 文字消息传输
+  - [ ] WebRTC 语音消息传输
+
+- [ ] 用户设置
+  - [ ] 自定义设置 UI
+  - [ ] `localStorage` API 配置存储
+
+- [ ] 跨平台应用
+  - [ ] Capacitor 安卓应用 ←
+  - [ ] Capacitor iOS 应用
+
 ## 许可证
 
 该程序在 GPL-3.0 许可证下发布。有关更多信息，请参阅 [LICENSE](LICENSE) 文件。
@@ -28,6 +53,6 @@ ReelSync - 随时随地和另一个人同时观看一个视频 | Watch videos wi
 
 ## 开发环境设置
 
-```sh
-npm install
+```bash
+git clone https://github.com/kev1nweng/reel-sync && cd reel-sync && npm i
 ```
