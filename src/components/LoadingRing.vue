@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "LoadingRing",
+  name: "LoadingRing", // this is not a ring tho
 };
 </script>
 
