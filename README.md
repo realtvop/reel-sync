@@ -1,5 +1,7 @@
 # reel-sync
 
+**简体中文 / [English](README.en.md)**
+
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
@@ -14,7 +16,7 @@
 
 - [x] 点对点模式
   - [x] WebRTC 实时视频流传输
-- [ ] 同源模式 ←
+- [ ] 同源模式
   - [x] WebRTC 播放进度和行为通讯
   - [x] 端到端播放进度同步
   - [x] 延迟测量
@@ -27,15 +29,19 @@
 
 - [ ] 用户设置
   - [ ] 自定义设置 UI
-  - [ ] `localStorage` API 配置存储
+  - [ ] `localStorage API` 配置存储
 
 - [ ] 跨平台应用
-  - [ ] Capacitor 安卓应用 ←
+  - [ ] Capacitor 安卓应用
   - [ ] Capacitor iOS 应用
+
+- [ ] i18n 多语言支持 ←
+  - [ ] 简体中文 ←
+  - [ ] English ←
 
 ## 许可证
 
-该程序在 GPL-3.0 许可证下发布。有关更多信息，请参阅 [LICENSE](LICENSE) 文件。
+该程序在 **GPL-3.0 许可证** 下发布。有关更多信息，请参阅 [LICENSE](LICENSE) 文件。
 
 ## 部署
 
@@ -49,7 +55,7 @@
 
 ## 推荐的开发环境
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (禁用 Vetur).
 
 ## 开发环境设置
 
