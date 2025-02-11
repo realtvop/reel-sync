@@ -26,4 +26,5 @@
 .monospace {
   font-family: ui-monospace, "Jetbrains Mono", "Maple Mono NF CN", "Cascadia Code",
     "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  user-select: all;
 }
