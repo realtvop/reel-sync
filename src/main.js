@@ -3,12 +3,27 @@ import "mdui";
 import "mdui/mdui.css";
 import { setColorScheme } from "mdui/functions/setColorScheme";
 import { createApp } from "vue";
+import { createI18n } from "vue-i18n";
 
 import App from "./App.vue";
 import router from "./router";
 
-const app = createApp(App);
+import zh_CN from "./locales/zh_CN.json";
+import en_US from "./locales/en_US.json";
 
+// Object.defineProperty(window.navigator, "language", { value: "en", configurable: true });
+
+const app = createApp(App);
+const i18n = createI18n({
+  locale: navigator.language,
+  fallbackLocale: "en-US",
+  messages: {
+    "zh-CN": zh_CN,
+    "en-US": en_US,
+  },
+});
+
+app.use(i18n);
 app.use(router);
 app.mount("#app");
 
@@ -23,6 +38,7 @@ export const shared = {
     videoURL: "",
     syncThread: null,
     pingThread: null,
+    i18n: i18n.global,
   },
   peers: {
     local: {

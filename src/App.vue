@@ -9,9 +9,9 @@ import { RouterView } from "vue-router";
   </div>
   <RouterView />
   <footer>
-    <b style="font-weight: bold">Version {{ REELSYNC_PACKAGE_VERSION }}</b>
-    Powered by WebRTC and other awesome web technologies. <br />
-    Crafted with ❤ by kW.
+    <b style="font-weight: bold">{{ $t("App.versionLiteral") }} {{ REELSYNC_PACKAGE_VERSION }}</b>
+    {{ $t("App.footer.techs")}}<br />
+    {{ $t("App.footer.author") }}
   </footer>
 </template>
 

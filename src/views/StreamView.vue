@@ -1,8 +1,10 @@
 <template>
   <div class="container-c">
-    <h1>流式传输</h1>
-    <span class="monospace" id="room-id-indicator">您的{{ roleDescription }}号：{{ roomID }}</span>
-    <span v-if="!isReady">⠀{{ hint }}</span
+    <h1>{{ $t("StreamView.title") }}</h1>
+    <span class="monospace" id="room-id-indicator">{{
+      $t("StreamView.messages.roomID", { roleDescription, roomID })
+    }}</span>
+    <span v-if="!isReady">{{ hint }}</span
     ><br />
     <div v-if="!isReady">
       <br />
@@ -17,12 +19,25 @@
     ><br /><br />
     <span id="status"
       ><s :style="{ color: isReady ? 'green' : 'red' }">⬤</s>
-      {{ isReady ? "已连接" : "未连接" }}：{{
-        !isSlave ? `正在推送${method == 1 ? "同源" : "点对点"}视频流` : "正在观看视频流"
+      {{
+        isReady ? $t("StreamView.messages.connected") : $t("StreamView.messages.disconnected")
+      }}：{{
+        !isSlave
+          ? $t("StreamView.messages.pushing", {
+              m:
+                method == 1
+                  ? $t("StreamView.messages.sameOriginLiteral")
+                  : $t("StreamView.messages.p2pLiteral"),
+            })
+          : $t("StreamView.messages.watching")
       }}
       <div v-if="((!isSlave && method == 1) || isSlave || (!isSlave && method == 0)) && isReady">
-        &nbsp;({{ method == 1 ? "视频进度差异" : "网络延迟" }}：{{
-          playbackDelta ? Math.round(playbackDelta * 1e3) : "正在测量"
+        &nbsp;({{
+          method == 1 ? $t("StreamView.messages.delta") : $t("StreamView.messages.latency")
+        }}: {{
+          playbackDelta
+            ? Math.round(playbackDelta * 1e3)
+            : $t("StreamView.messages.measuringLiteral")
         }}{{ playbackDelta ? "ms" : "" }})
       </div></span
     >
@@ -49,15 +64,19 @@ export default {
         return shared.app.method;
       },
       get roleDescription() {
-        return this.isSlave ? "成员" : "房间";
+        return this.isSlave
+          ? shared.app.i18n.t("StreamView.roleDescription.slave")
+          : shared.app.i18n.t("StreamView.roleDescription.master");
       },
       get hint() {
         return this.isSlave
-          ? "请耐心等待。正在全球互联网寻找您的伙伴..."
-          : "号码已复制。请您将号码发送给您的伙伴。";
+          ? shared.app.i18n.t("StreamView.hint.slave")
+          : shared.app.i18n.t("StreamView.hint.master");
       },
       get loadingDescription() {
-        return shared.app.mode == 1 ? "正在加入伙伴" : "正在等待伙伴";
+        return shared.app.mode == 1
+          ? shared.app.i18n.t("StreamView.messages.joining")
+          : shared.app.i18n.t("StreamView.messages.waiting");
       },
       get roomID() {
         return this.isSlave && shared.app.guestID ? shared.app.guestID : shared.app.roomID;
@@ -184,24 +203,10 @@ export default {
           if (status === "connected") {
             msg.i(`和 ${conn.peer} 的连接已建立`);
             that.isReady = true;
-            // const videoConstraints = {
-            //   width: { min: 1920, ideal: 2560, max: 3840 },
-            //   height: { min: 1080, ideal: 1440, max: 2160 },
-            //   frameRate: { min: 30, ideal: 30, max: 60 },
-            // };
-            // const audioConstraints = {
-            //   echoCancellation: false,
-            //   noiseSuppression: false,
-            //   autoGainControl: false,
-            //   sampleRate: 48000,
-            //   channelCount: 2,
-            // };
             if (shared.app.method == 0) {
               const stream = document.querySelector("#video-player-stream").captureStream();
-              // stream.getVideoTracks()[0].applyConstraints(videoConstraints);
-              // if (stream.getAudioTracks().length > 0) stream.getAudioTracks()[0].applyConstraints(audioConstraints);
+              // eslint-disable-next-line no-unused-vars
               const call = shared.peers.local.video.call(`${peerID}-video`, stream);
-              call; // prevent eslint error
               shared.app.pingThread = setInterval(
                 () => {
                   conn.send(`timestamp@${Date.now()}`);

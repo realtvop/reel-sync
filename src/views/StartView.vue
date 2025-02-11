@@ -1,7 +1,7 @@
 <template>
   <div class="container-c">
-    <h1>开始</h1>
-    <span>⠀调整选项并开始分享您的视频流。<br />⠀{{ modeDescription }}</span>
+    <h1>{{ $t("StartView.title") }}</h1>
+    <span>{{ $t("StartView.description") }}<br />{{ modeDescription }}</span>
     <br />
     <div id="options">
       <div>
@@ -25,7 +25,9 @@
           unchecked-icon="commit--rounded"
           checked
         ></mdui-switch>
-        <label id="method-indicator">{{ isMaster ? methodName : "选项不可用" }}</label>
+        <label id="method-indicator">{{
+          isMaster ? methodName : $t("StartView.messages.toggleUnavailable")
+        }}</label>
       </div>
     </div>
     <br />
@@ -39,14 +41,14 @@
         icon="upload--rounded"
         @click="uploadVideo"
       >
-        上传视频文件
+        {{ $t("StartView.buttons.uploadVideo") }}
       </mdui-fab>
       <mdui-text-field
         v-else
         id="origin-url-input"
         class="monospace"
         v-model="originURL"
-        label="源 URL"
+        :label="$t('StartView.labels.sourceURL')"
         variant="outlined"
         clearable
         counter
@@ -58,7 +60,7 @@
         id="create-room-button"
         :disabled="(!isVideoReady && !isOriginReady) || isLoading"
         :loading="isLoading"
-        >创建房间</mdui-button
+        >{{ $t("StartView.buttons.createRoom") }}</mdui-button
       >
     </div>
     <div v-else>
@@ -66,7 +68,7 @@
         id="room-id-input"
         class="monospace"
         v-model="roomID"
-        label="房间 ID"
+        :label="$t('StartView.labels.roomID')"
         variant="outlined"
         maxlength="16"
         clearable
@@ -78,7 +80,7 @@
         id="join-room-button"
         :disabled="!isRoomReady"
         :loading="isLoading"
-        >加入房间</mdui-button
+        >{{ $t("StartView.buttons.joinRoom") }}</mdui-button
       >
     </div>
   </div>
@@ -105,15 +107,19 @@ export default {
       isLoading: false,
       isRoomReady: false,
       get methodName() {
-        return this.method === 0 ? "点对点模式" : "同源模式";
+        return this.method === 0
+          ? shared.app.i18n.t("StartView.methods.name.p2p")
+          : shared.app.i18n.t("StartView.methods.name.sameOrigin");
       },
       get modeName() {
-        return this.mode === 0 ? "主节点模式" : "从节点模式";
+        return this.mode === 0
+          ? shared.app.i18n.t("StartView.modes.name.master")
+          : shared.app.i18n.t("StartView.modes.name.slave");
       },
       get modeDescription() {
         return this.mode === 0
-          ? "您可以创建房间并将您本地的视频文件分享给他人。"
-          : "您可以加入其他人创建的房间并观看他们的视频流。";
+          ? shared.app.i18n.t("StartView.modes.description.master")
+          : shared.app.i18n.t("StartView.modes.description.slave");
       },
       get isMaster() {
         return this.mode === 0;
@@ -261,10 +267,13 @@ export default {
         shared.app.roomID = value;
       } else if (value.length == 0) {
         this.isRoomReady = false;
-        roomIDInput.setAttribute("helper", "请提供一个房间 ID。");
+        roomIDInput.setAttribute("helper", shared.app.i18n.t("StartView.roomIDInput.helper.empty"));
       } else {
         this.isRoomReady = false;
-        roomIDInput.setAttribute("helper", "房间 ID 格式不正确。");
+        roomIDInput.setAttribute(
+          "helper",
+          shared.app.i18n.t("StartView.roomIDInput.helper.invalid"),
+        );
       }
     },
     originURL(value) {

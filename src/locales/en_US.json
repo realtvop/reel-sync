@@ -1,0 +1,72 @@
+{
+  "App": {
+    "versionLiteral": "Version",
+    "footer": {
+      "techs": "Powerd by WebRTC and other awesome Web technologies.",
+      "author": "Crafted by kW with ❤."
+    }
+  },
+  "StartView": {
+    "title": "Start",
+    "description": "Toggle the options to your needs and start sharing your media stream.",
+    "messages": {
+      "toggleUnavailable": "Unavailable"
+    },
+    "buttons": {
+      "uploadVideo": "Upload Your Video",
+      "createRoom": "Create a Room",
+      "joinRoom": "Join the Room"
+    },
+    "labels": {
+      "roomID": "Room ID",
+      "sourceURL": "Source URL"
+    },
+    "modes": {
+      "name": {
+        "master": "Master Mode",
+        "slave": "Slave Mode"
+      },
+      "description": {
+        "master": "You may create a room and share your local video stream with others.",
+        "slave": "You may join others' rooms and watch their video streams."
+      }
+    },
+    "methods": {
+      "name": {
+        "p2p": "Peer-to-Peer",
+        "sameOrigin": "Same-Origin"
+      }
+    },
+    "roomIDInput": {
+      "helper": {
+        "empty": "Please provide a Room ID.",
+        "invalid": "The Room ID is invalid."
+      }
+    }
+  },
+  "StreamView": {
+    "title": "Stream",
+    "hint": {
+      "master": "Your Room ID is copied. Send it to your partner.",
+      "slave": "Please wait patiently as we are looking for your partner on the Internet."
+    },
+    "roleDescription": {
+      "master": "Room",
+      "slave": "User"
+    },
+    "messages": {
+      "roomID": "Your {roleDescription} ID: {roomID}",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "pushing": "Pushing {m} video stream",
+      "watching": "Watching video stream",
+      "joining": "Joining your peer",
+      "waiting": "Waiting for your peer",
+      "measuringLiteral": "Measuring",
+      "sameOriginLiteral": "same-origin",
+      "p2pLiteral": "peer-to-peer",
+      "delta": "Video progress difference",
+      "latency": "Network latency"
+    }
+  }
+}

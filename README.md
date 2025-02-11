@@ -36,8 +36,10 @@
   - [ ] Capacitor iOS 应用
 
 - [ ] i18n 多语言支持 ←
-  - [ ] 简体中文 ←
-  - [ ] English ←
+  - [x] StartView UI (CN/EN)
+  - [x] StreamView UI (CN/EN)
+  - [ ] msg (CN/EN) ←
+  - [ ] 手动切换？←
 
 ## 许可证
 
