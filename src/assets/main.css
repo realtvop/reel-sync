@@ -19,7 +19,8 @@
   flex-direction: column;
   text-align: center;
   margin: 0 auto;
-  height: calc(100vh - var(--topbar-height) - 10rem);
+  /* wtf? */
+  height: calc(100vh - var(--topbar-height) - 4rem - 61.406px);
   justify-content: center;
 }
 
