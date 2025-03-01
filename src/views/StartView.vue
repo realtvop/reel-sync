@@ -1,3 +1,13 @@
+<script setup>
+import { PeerID } from "@/utils/PeerID";
+import { shared } from "@/main";
+import { msg } from "@/utils/msg";
+
+import Peer from "peerjs";
+import VideoInput from "@/components/VideoInput.vue";
+import VideoPlayer from "@/components/VideoPlayer.vue";
+</script>
+
 <template>
   <div class="container-c">
     <h1>{{ $t("StartView.title") }}</h1>
@@ -87,14 +97,6 @@
 </template>
 
 <script>
-import { PeerID } from "@/utils/PeerID";
-import { shared } from "@/main";
-import { msg } from "@/utils/msg";
-
-import Peer from "peerjs";
-import VideoInput from "@/components/VideoInput.vue";
-import VideoPlayer from "@/components/VideoPlayer.vue";
-
 export default {
   data() {
     return {

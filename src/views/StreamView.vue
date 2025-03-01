@@ -1,3 +1,12 @@
+<script setup>
+import { shared } from "@/main";
+import { msg } from "@/utils/msg";
+// import { transformSdp } from "@/utils/sdp";
+
+import LoadingRing from "@/components/LoadingRing.vue";
+import VideoPlayer from "@/components/VideoPlayer.vue";
+</script>
+
 <template>
   <div class="container-c">
     <h1>{{ $t("StreamView.title") }}</h1>
@@ -34,7 +43,8 @@
       <div v-if="((!isSlave && method == 1) || isSlave || (!isSlave && method == 0)) && isReady">
         &nbsp;({{
           method == 1 ? $t("StreamView.messages.delta") : $t("StreamView.messages.latency")
-        }}: {{
+        }}:
+        {{
           playbackDelta
             ? Math.round(playbackDelta * 1e3)
             : $t("StreamView.messages.measuringLiteral")
@@ -45,13 +55,6 @@
 </template>
 
 <script>
-import { shared } from "@/main";
-import { msg } from "@/utils/msg";
-// import { transformSdp } from "@/utils/sdp";
-
-import LoadingRing from "@/components/LoadingRing.vue";
-import VideoPlayer from "@/components/VideoPlayer.vue";
-
 export default {
   name: "StreamView",
   data() {
