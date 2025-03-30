@@ -14,8 +14,16 @@
 
 ***School is quite busy, progress may be slow. Feel free to fork and contribute.***
 
+- [ ] Browser Compatibility
+  - [ ] Mozilla Firefox ←
+    - [ ] Issue with receiving but not sending due to lack of `captureStream()` support *(Consider `mozCaptureStream()`)* ←
+    - [ ] Homepage style issue (`padding` not displaying correctly)
+  - [ ] Safari (and all browsers using Apple Webkit)
+    - [ ] Issue with receiving but not sending due to lack of `captureStream()` support *(Hard to fix... `MediaRecorder`?)*
+
 - [x] Peer-to-peer mode
   - [x] WebRTC real-time video streaming
+
 - [ ] Same-origin mode
   - [x] WebRTC playback progress and behavior communication
   - [x] End-to-end playback progress synchronization

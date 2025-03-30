@@ -10,7 +10,7 @@ import { RouterView } from "vue-router";
   <RouterView />
   <footer>
     <b style="font-weight: bold">{{ $t("App.versionLiteral") }} {{ REELSYNC_PACKAGE_VERSION }}</b>
-    {{ $t("App.footer.techs")}}<br />
+    {{ $t("App.footer.techs") }}<br />
     {{ $t("App.footer.author") }}
   </footer>
 </template>
