@@ -15,9 +15,9 @@
 ***上学比较忙，进度可能推进缓慢。欢迎 Fork 并贡献。***
 
 - [ ] 浏览器适配
-  - [ ] Mozilla Firefox ←
-    - [ ] 因不支持 `captureStream()` 可接收不可发送的问题 *（考虑 `mozCaptureStream()`）* ←
-    - [ ] 主页样式错误问题（`padding` 未被正确显示）
+  - [x] Mozilla Firefox
+    - [x] 因不支持 `captureStream()` 可接收不可发送的问题 *（考虑 `mozCaptureStream()`）*
+    - [x] 主页样式错误问题（`padding` 未被正确显示）
   - [ ] Safari (以及所有利用 Apple Webkit 的浏览器)
     - [ ] 因不支持 `captureStream()` 可接收不可发送的问题 *（难以修复...`MediaRecorder`？）*
 

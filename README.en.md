@@ -15,9 +15,9 @@
 ***School is quite busy, progress may be slow. Feel free to fork and contribute.***
 
 - [ ] Browser Compatibility
-  - [ ] Mozilla Firefox ←
-    - [ ] Issue with receiving but not sending due to lack of `captureStream()` support *(Consider `mozCaptureStream()`)* ←
-    - [ ] Homepage style issue (`padding` not displaying correctly)
+  - [x] Mozilla Firefox
+    - [x] Issue with receiving but not sending due to lack of `captureStream()` support *(Consider `mozCaptureStream()`)*
+    - [x] Homepage style issue (`padding` not displaying correctly)
   - [ ] Safari (and all browsers using Apple Webkit)
     - [ ] Issue with receiving but not sending due to lack of `captureStream()` support *(Hard to fix... `MediaRecorder`?)*
 
