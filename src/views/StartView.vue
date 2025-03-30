@@ -6,13 +6,14 @@ import { msg } from "@/utils/msg";
 import Peer from "peerjs";
 import VideoInput from "@/components/VideoInput.vue";
 import VideoPlayer from "@/components/VideoPlayer.vue";
+import BlankPadding from "@/components/BlankPadding.vue";
 </script>
 
 <template>
   <div class="container-c">
     <h1>{{ $t("StartView.title") }}</h1>
     <span>{{ $t("StartView.description") }}<br />{{ modeDescription }}</span>
-    <br />
+    <reelsync-padding></reelsync-padding>
     <div id="options">
       <div>
         <mdui-switch
@@ -40,7 +41,7 @@ import VideoPlayer from "@/components/VideoPlayer.vue";
         }}</label>
       </div>
     </div>
-    <br />
+    <reelsync-padding></reelsync-padding>
     <div v-if="isMaster">
       <reelsync-video-input id="video-input" @change="onVideoUpload"></reelsync-video-input>
       <mdui-fab
@@ -64,7 +65,7 @@ import VideoPlayer from "@/components/VideoPlayer.vue";
         counter
       ></mdui-text-field>
       <reelsync-video-player style="display: none" id="video-player"></reelsync-video-player>
-      <br /><br />
+      <reelsync-padding></reelsync-padding>
       <mdui-button
         @click="onCreateRequest"
         id="create-room-button"
@@ -321,6 +322,7 @@ export default {
   components: {
     "reelsync-video-input": VideoInput,
     "reelsync-video-player": VideoPlayer,
+    "reelsync-padding": BlankPadding
   },
 };
 </script>

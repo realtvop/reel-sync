@@ -5,6 +5,7 @@ import { msg } from "@/utils/msg";
 
 import LoadingRing from "@/components/LoadingRing.vue";
 import VideoPlayer from "@/components/VideoPlayer.vue";
+import BlankPadding from "@/components/BlankPadding.vue";
 </script>
 
 <template>
@@ -14,9 +15,9 @@ import VideoPlayer from "@/components/VideoPlayer.vue";
       $t("StreamView.messages.roomID", { roleDescription, roomID })
     }}</span>
     <span v-if="!isReady">{{ hint }}</span
-    ><br />
+    ><reelsync-padding></reelsync-padding>
     <div v-if="!isReady">
-      <br />
+      <reelsync-padding></reelsync-padding>
       <loading-ring id="loading"></loading-ring><br />
       <h3>{{ loadingDescription }}</h3>
     </div>
@@ -25,7 +26,7 @@ import VideoPlayer from "@/components/VideoPlayer.vue";
       id="video-player-stream"
       :style="{ display: isReady ? 'block' : 'none' }"
     ></video-player
-    ><br /><br />
+    ><reelsync-padding></reelsync-padding>
     <span id="status"
       ><s :style="{ color: isReady ? 'green' : 'red' }">⬤</s>
       {{
@@ -223,7 +224,7 @@ export default {
                 stream = videoPlayer.captureStream();
               } catch (e) {
                 stream = videoPlayer.mozCaptureStream();
-                msg.w(`由于错误: ${e} 尝试使用 mozCaptureStream()...`)
+                msg.w(`由于错误: ${e} 尝试使用 mozCaptureStream()...`);
               }
               // eslint-disable-next-line no-unused-vars
               const call = shared.peers.local.video.call(`${peerID}-video`, stream);
@@ -294,6 +295,7 @@ export default {
   components: {
     "loading-ring": LoadingRing,
     "video-player": VideoPlayer,
+    "reelsync-padding": BlankPadding,
   },
 };
 </script>
