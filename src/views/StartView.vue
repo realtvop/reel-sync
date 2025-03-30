@@ -132,18 +132,25 @@ export default {
     };
   },
   methods: {
+    // 切换主从控制模式
     changeMode() {
       this.mode = document.getElementById("mode-switch").checked ? 0 : 1;
       // 0: master, 1: slave
     },
+
+    // 切换传输方式
     changeMethod() {
       this.method = document.getElementById("method-switch").checked ? 0 : 1;
       // 0: p2p, 1: same-origin
       document.getElementById("create-room-button").disabled = true;
     },
+
+    // 触发文件选择对话框
     uploadVideo() {
       document.querySelector("#video-input").click();
     },
+
+    // 检查选择的视频文件是否有效
     checkVideoValidity() {
       const videoInput = document.querySelector("#video-input");
       msg.i(`已获得视频文件：${videoInput.value}`);
@@ -153,6 +160,8 @@ export default {
         return false;
       }
     },
+
+    // 获取TURN服务器配置
     async getTurnNode() {
       const url = import.meta.env.VITE_NODE_SERVER_URL;
       const data = {
@@ -189,6 +198,8 @@ export default {
         return false;
       }
     },
+
+    // 创建新房间(主控端)
     async createRoom() {
       const cfg = (await this.getTurnNode()) ?? {};
       const id = new PeerID().id;
@@ -197,6 +208,8 @@ export default {
       shared.peers.local.video = new Peer(id.video, { config: cfg });
       this.$router.push("/stream");
     },
+
+    // 加入已有房间(从属端)
     async joinRoom() {
       const cfg = (await this.getTurnNode()) ?? {};
       const id = new PeerID().id;
@@ -205,11 +218,15 @@ export default {
       shared.peers.local.video = new Peer(id.video, { config: cfg });
       this.$router.push("/stream");
     },
+
+    // 创建房间的点击处理
     async onCreateRequest() {
       this.isLoading = true;
       await this.createRoom();
       this.isLoading = false;
     },
+
+    // 加入房间的点击处理
     async onJoinRequest() {
       this.isLoading = true;
       document.getElementById("join-room-button").setAttribute("disabled", true);
@@ -217,11 +234,15 @@ export default {
       this.isLoading = false;
       document.getElementById("join-room-button").removeAttribute("disabled");
     },
+
+    // 处理选择的视频文件
     handleFileChange(event) {
       const file = event.target.files[0];
       const videoURL = URL.createObjectURL(file);
       shared.app.videoURL = videoURL;
     },
+
+    // 视频上传完成的回调
     onVideoUpload(event) {
       const createRoomButton = document.getElementById("create-room-button");
       if (this.checkVideoValidity()) {
@@ -230,6 +251,8 @@ export default {
         this.isVideoReady = true;
       } else this.isVideoReady = false;
     },
+
+    // 处理回车键快捷操作
     handleKeyPress(event) {
       if (event.key === "Enter") {
         if (this.isMaster) {

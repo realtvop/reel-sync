@@ -101,10 +101,12 @@ export default {
 
       msg.i(`尝试连接到 ${remotePeerId} (第 ${this.connectionAttempts + 1} 次)`);
 
+      // 建立数据通道连接
       const conn = dataPeer.connect(remotePeerId, {
         reliable: true,
       });
 
+      // 连接成功回调
       conn.on("open", () => {
         conn.send(`connected@${shared.app.guestID}`);
         msg.i(`和 ${shared.app.roomID} 的连接已建立`);
@@ -122,6 +124,7 @@ export default {
         shared.peers.remote.data = conn;
       });
 
+      // 数据接收处理
       conn.on("data", (data) => {
         const video = document.getElementById("video-player-stream");
         if (data.toString().startsWith("origin")) {
@@ -131,7 +134,6 @@ export default {
           shared.app.syncThread = setInterval(
             () => {
               msg.i(`发送当前视频进度: ${video.currentTime}`);
-              // bro this msg syntax is bad ahhhh
               conn.send(`video@sync:${video.currentTime}&timestamp=${Date.now()}`);
             },
             import.meta.env.VITE_SAME_ORIGIN_SYNC_INTERVAL_SECONDS * 1e3,
@@ -157,6 +159,7 @@ export default {
         }
       });
 
+      // 错误处理和重试
       conn.on("error", (err) => {
         msg.e(`和 ${shared.app.roomID} 的连接建立失败: ${err.message}`);
         console.error(err);
@@ -165,6 +168,7 @@ export default {
         setTimeout(() => this.connectToPeer(), 1000);
       });
 
+      // 连接关闭处理
       conn.on("close", () => {
         msg.w("连接已关闭");
         shared.peers.remote.data = null;
@@ -175,6 +179,7 @@ export default {
     },
   },
   mounted() {
+    // 初始化检查
     if (this.roomID === "") {
       this.$router.replace("/");
       return;
@@ -183,6 +188,7 @@ export default {
     const that = this;
 
     if (this.isSlave) {
+      // 从属端逻辑
       const dataPeer = shared.peers.local.data;
 
       // 确保peer已经就绪后再连接
@@ -195,11 +201,15 @@ export default {
       }
     } else {
       navigator.clipboard.writeText(this.roomID);
+
+      // 处理连接请求
       shared.peers.local.data.on("connection", (conn) => {
         conn.on("open", function () {
           msg.i(`已收到来自 ${conn.peer} 的连接`);
           shared.peers.remote.data = conn;
         });
+
+        // 数据接收处理
         conn.on("data", function (data) {
           const status = data.toString().split("@")[0];
           const peerID = data.toString().split("@")[1];
@@ -207,7 +217,14 @@ export default {
             msg.i(`和 ${conn.peer} 的连接已建立`);
             that.isReady = true;
             if (shared.app.method == 0) {
-              const stream = document.querySelector("#video-player-stream").captureStream();
+              const videoPlayer = document.querySelector("#video-player-stream");
+              let stream;
+              try {
+                stream = videoPlayer.captureStream();
+              } catch (e) {
+                stream = videoPlayer.mozCaptureStream();
+                msg.w(`由于错误: ${e} 尝试使用 mozCaptureStream()...`)
+              }
               // eslint-disable-next-line no-unused-vars
               const call = shared.peers.local.video.call(`${peerID}-video`, stream);
               shared.app.pingThread = setInterval(
@@ -254,6 +271,8 @@ export default {
             msg.e(`收到无效消息：${data}`);
           }
         });
+
+        // 连接关闭处理
         conn.on("close", () => {
           msg.w("连接已关闭");
           shared.peers.remote.data = null;
