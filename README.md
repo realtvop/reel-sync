@@ -47,7 +47,7 @@
   - [x] StartView UI (CN/EN)
   - [x] StreamView UI (CN/EN)
   - [ ] ~~msg (CN/EN)~~
-  - [x]手动切换
+  - [x] 手动切换
 
 - [ ] 其他功能
   - [ ] 分享直链
