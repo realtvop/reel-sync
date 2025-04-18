@@ -2,8 +2,21 @@
   "App": {
     "versionLiteral": "Version",
     "footer": {
-      "techs": "Powerd by WebRTC and other awesome Web technologies.",
+      "techs": "Powerd by WebRTC and other awesome Web technologies. NO data gets stored as a file on ANY server.",
       "author": "Crafted by kW with ❤."
+    },
+    "languageSwitch": {
+      "cancelText": "否",
+      "confirmText": "是",
+      "description": "您确定要将显示语言切换到中文吗？",
+      "headline": "切换语言",
+      "indicatorButton": "语言"
+    },
+    "settingsButton": "Settings",
+    "settingsDialog": {
+      "content": "The area ahead, let's explore it later!",
+      "confirmText": "OK",
+      "title": "Feature Undone"
     }
   },
   "StartView": {

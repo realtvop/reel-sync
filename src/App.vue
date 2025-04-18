@@ -1,10 +1,26 @@
 <script setup>
 import { RouterView } from "vue-router";
+import { confirm } from "mdui/functions/confirm";
+import { alert } from "mdui/functions/alert";
 </script>
 
 <template>
   <div class="topbar">
+    <mdui-chip
+      icon="language--rounded"
+      class="topbar-lbtn"
+      elevated
+      @click="showLanguageSwitchConfirmation"
+      >{{ $t("App.languageSwitch.indicatorButton") }}</mdui-chip
+    >
     <img src="./assets/logo.png" alt="ReelSync Logo" id="logo" />
+    <mdui-chip
+      end-icon="settings--rounded"
+      class="topbar-rbtn"
+      elevated
+      @click="showSettingsDialog"
+      >{{ $t("App.settingsButton") }}</mdui-chip
+    >
     <div id="title">ReelSync</div>
   </div>
   <RouterView />
@@ -18,6 +34,31 @@ import { RouterView } from "vue-router";
 <script>
 export default {
   name: "App",
+  methods: {
+    showLanguageSwitchConfirmation() {
+      confirm({
+        headline: this.$t("App.languageSwitch.headline"),
+        description: this.$t("App.languageSwitch.description"),
+        confirmText: this.$t("App.languageSwitch.confirmText"),
+        cancelText: this.$t("App.languageSwitch.cancelText"),
+        onConfirm: () => {
+          const targetLocale = this.$i18n.locale === "zh-CN" ? "en-US" : "zh-CN";
+          this.$i18n.locale = targetLocale;
+          localStorage.setItem("reelsync-locale", targetLocale);
+          window.getComputedStyle(document.querySelector("#video-upload-button"));
+        },
+        onCancel: () => null,
+      });
+    },
+    showSettingsDialog() {
+      alert({
+        headline: this.$t("App.settingsDialog.title"),
+        description: this.$t("App.settingsDialog.content"),
+        confirmText: this.$t("App.settingsDialog.confirmText"),
+        onConfirm: () => null,
+      });
+    },
+  },
   data() {
     return {
       // eslint-disable-next-line no-undef
@@ -41,6 +82,22 @@ export default {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   mask-image: linear-gradient(180deg, white 85%, transparent 100%);
+}
+
+.topbar-lbtn {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin-left: calc(var(--topbar-height) / 2 - 16px);
+  margin-top: calc(var(--topbar-height) / 2 - 16px);
+}
+
+.topbar-rbtn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-right: calc(var(--topbar-height) / 2 - 16px);
+  margin-top: calc(var(--topbar-height) / 2 - 16px);
 }
 
 #title {

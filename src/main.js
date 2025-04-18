@@ -13,9 +13,12 @@ import en_US from "./locales/en_US.json";
 
 // Object.defineProperty(window.navigator, "language", { value: "en", configurable: true });
 
+if (!localStorage.getItem("reelsync-locale"))
+  localStorage.setItem("reelsync-locale", navigator.language);
+
 const app = createApp(App);
 const i18n = createI18n({
-  locale: navigator.language,
+  locale: localStorage.getItem("reelsync-locale"),
   fallbackLocale: "en-US",
   messages: {
     "zh-CN": zh_CN,

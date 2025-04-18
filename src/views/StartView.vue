@@ -46,6 +46,7 @@ import BlankPadding from "@/components/BlankPadding.vue";
       <reelsync-video-input id="video-input" @change="onVideoUpload"></reelsync-video-input>
       <mdui-fab
         extended
+        id="video-upload-button"
         v-if="isP2P"
         size="normal"
         variant="surface"
@@ -293,12 +294,12 @@ export default {
         shared.app.roomID = value;
       } else if (value.length == 0) {
         this.isRoomReady = false;
-        roomIDInput.setAttribute("helper", shared.app.i18n.t("StartView.roomIDInput.helper.empty"));
+        roomIDInput.setAttribute("helper", this.$t("StartView.roomIDInput.helper.empty"));
       } else {
         this.isRoomReady = false;
         roomIDInput.setAttribute(
           "helper",
-          shared.app.i18n.t("StartView.roomIDInput.helper.invalid"),
+          this.$t("StartView.roomIDInput.helper.invalid"),
         );
       }
     },
