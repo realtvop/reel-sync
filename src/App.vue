@@ -45,7 +45,6 @@ export default {
           const targetLocale = this.$i18n.locale === "zh-CN" ? "en-US" : "zh-CN";
           this.$i18n.locale = targetLocale;
           localStorage.setItem("reelsync-locale", targetLocale);
-          window.getComputedStyle(document.querySelector("#video-upload-button"));
         },
         onCancel: () => null,
       });

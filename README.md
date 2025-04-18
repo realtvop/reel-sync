@@ -8,7 +8,7 @@
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 
-随时随地和另一个人同时观看一个视频 | Watch videos with someone in sync, anytime, anywhere. 
+随时随地和另一个人同时观看一个视频 | Watch videos with someone in sync, anytime, anywhere.
 
 ## 路线图
 
@@ -47,7 +47,10 @@
   - [x] StartView UI (CN/EN)
   - [x] StreamView UI (CN/EN)
   - [ ] ~~msg (CN/EN)~~
-  - [ ] 手动切换？←
+  - [x]手动切换
+
+- [ ] 其他功能
+  - [ ] 分享直链
 
 ## 许可证
 
