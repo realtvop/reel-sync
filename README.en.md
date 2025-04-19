@@ -51,6 +51,7 @@
 
 - [ ] Other features
   - [ ] Direct share link
+  - [ ] Background image customization
 
 ## License
 
