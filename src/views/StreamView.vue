@@ -3,6 +3,7 @@ import { shared } from "@/main";
 import { msg } from "@/utils/msg";
 // import { transformSdp } from "@/utils/sdp";
 
+import { screenCapture } from "@/utils/ScreenCapture";
 import LoadingRing from "@/components/LoadingRing.vue";
 import VideoPlayer from "@/components/VideoPlayer.vue";
 import BlankPadding from "@/components/BlankPadding.vue";
@@ -15,7 +16,7 @@ import BlankPadding from "@/components/BlankPadding.vue";
       $t("StreamView.messages.roomID", { roleDescription, roomID })
     }}</span>
     <span v-if="!isReady">{{ hint }}</span
-    ><reelsync-padding></reelsync-padding>
+    ><reelsync-padding></reelsync-padding> 
     <div v-if="!isReady">
       <reelsync-padding></reelsync-padding>
       <loading-ring id="loading"></loading-ring><br />
@@ -32,14 +33,14 @@ import BlankPadding from "@/components/BlankPadding.vue";
       {{
         isReady ? $t("StreamView.messages.connected") : $t("StreamView.messages.disconnected")
       }}：{{
-        !isSlave
-          ? $t("StreamView.messages.pushing", {
+        isSlave
+          ? $t("StreamView.messages.watching")
+          : $t("StreamView.messages.pushing", {
               m:
                 method == 1
                   ? $t("StreamView.messages.sameOriginLiteral")
                   : $t("StreamView.messages.p2pLiteral"),
             })
-          : $t("StreamView.messages.watching")
       }}
       <div v-if="((!isSlave && method == 1) || isSlave || (!isSlave && method == 0)) && isReady">
         &nbsp;({{
@@ -220,12 +221,14 @@ export default {
             if (shared.app.method == 0) {
               const videoPlayer = document.querySelector("#video-player-stream");
               let stream;
-              try {
-                stream = videoPlayer.captureStream();
-              } catch (e) {
-                stream = videoPlayer.mozCaptureStream();
-                msg.w(`由于错误: ${e} 尝试使用 mozCaptureStream()...`);
-              }
+              // TODO
+              // try {
+              //   stream = videoPlayer.captureStream();
+              // } catch (e) {
+              //   stream = videoPlayer.mozCaptureStream();
+              //   msg.w(`由于错误: ${e} 尝试使用 mozCaptureStream()...`);
+              // }
+              stream = screenCapture.getStream();
               // eslint-disable-next-line no-unused-vars
               const call = shared.peers.local.video.call(`${peerID}-video`, stream);
               shared.app.pingThread = setInterval(
