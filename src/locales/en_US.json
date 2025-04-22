@@ -27,6 +27,7 @@
     },
     "buttons": {
       "uploadVideo": "Load Your Video",
+      "startScreenSharing": "Start Screen Sharing",
       "createRoom": "Create a Room",
       "joinRoom": "Join the Room"
     },

@@ -27,6 +27,7 @@
     },
     "buttons": {
       "uploadVideo": "加载视频文件",
+      "startScreenSharing": "开始共享屏幕",
       "createRoom": "创建房间",
       "joinRoom": "加入房间"
     },
