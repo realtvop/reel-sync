@@ -4,6 +4,7 @@ import { shared } from "@/main";
 import { msg } from "@/utils/msg";
 
 import Peer from "peerjs";
+import { screenCapture } from "@/utils/ScreenCapture";
 import VideoInput from "@/components/VideoInput.vue";
 import VideoPlayer from "@/components/VideoPlayer.vue";
 import BlankPadding from "@/components/BlankPadding.vue";
@@ -44,17 +45,31 @@ import BlankPadding from "@/components/BlankPadding.vue";
     <reelsync-padding></reelsync-padding>
     <div v-if="isMaster">
       <reelsync-video-input id="video-input" @change="onVideoUpload"></reelsync-video-input>
-      <mdui-fab
-        extended
-        id="video-upload-button"
+      <div
         v-if="isP2P"
-        size="normal"
-        variant="surface"
-        icon="upload--rounded"
-        @click="uploadVideo"
+        id="video-source-options"
       >
-        {{ $t("StartView.buttons.uploadVideo") }}
-      </mdui-fab>
+        <mdui-fab
+          extended
+          id="video-upload-button"
+          size="normal"
+          variant="surface"
+          icon="upload--rounded"
+          @click="uploadVideo"
+        >
+          {{ $t("StartView.buttons.uploadVideo") }}
+        </mdui-fab>
+        <mdui-fab
+          extended
+          id="video-upload-button"
+          size="normal"
+          variant="surface"
+          icon="screen_share--rounded"
+          @click="loadScreen"
+        >
+          {{ $t("StartView.buttons.startScreenSharing") }}
+        </mdui-fab>
+      </div>
       <mdui-text-field
         v-else
         id="origin-url-input"
@@ -150,6 +165,11 @@ export default {
     // 触发文件选择对话框
     uploadVideo() {
       document.querySelector("#video-input").click();
+    },
+
+    // 触发屏幕分享对话框
+    loadScreen() {
+      screenCapture.start();
     },
 
     // 检查选择的视频文件是否有效
@@ -297,10 +317,7 @@ export default {
         roomIDInput.setAttribute("helper", this.$t("StartView.roomIDInput.helper.empty"));
       } else {
         this.isRoomReady = false;
-        roomIDInput.setAttribute(
-          "helper",
-          this.$t("StartView.roomIDInput.helper.invalid"),
-        );
+        roomIDInput.setAttribute("helper", this.$t("StartView.roomIDInput.helper.invalid"));
       }
     },
     originURL(value) {
@@ -308,7 +325,7 @@ export default {
       if (
         value.length > 0 &&
         new String(value).match(
-          /^(?:(http|https|ftp):\/\/)?((|[\w-]+\.)+[a-z0-9]+)(?:(\/[^/?#]+)*)?(\?[^#]+)?(#.+)?$/i,
+          /^(?:(http|https|ftp):\/\/)?((|[\w-]+\.)+[a-z0-9]+)(?:(\/[^/?#]+)*)?(\?[^#]+)?(#.+)?$/i
         )
       ) {
         msg.d("video ready");
@@ -323,7 +340,7 @@ export default {
   components: {
     "reelsync-video-input": VideoInput,
     "reelsync-video-player": VideoPlayer,
-    "reelsync-padding": BlankPadding
+    "reelsync-padding": BlankPadding,
   },
 };
 </script>
@@ -349,5 +366,13 @@ mdui-text-field {
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+#video-source-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
 }
 </style>
